@@ -10,7 +10,7 @@ namespace Features.Input
 		IDisposable,
 		IBaseInputMapInit
 	{
-		CompositeDisposable _disposables;
+		CompositeDisposable _disposables = new();
 
 		[Inject] InputActions _inputActions;
 
@@ -64,11 +64,7 @@ namespace Features.Input
 				.FromEvent<InputAction.CallbackContext>(
 					h => Map.Getitem.canceled += h,
 					h => Map.Getitem.canceled -= h)
-				.Subscribe(context =>
-				{
-					var screenPos = context.ReadValue<Vector2>();
-					_drop.OnNext(screenPos);
-				})
+				.Subscribe(_ => _drop.OnNext(PointerPos))
 				.AddTo(_disposables);
 		}
 
@@ -78,11 +74,7 @@ namespace Features.Input
 				.FromEvent<InputAction.CallbackContext>(
 					h => Map.Getitem.started += h,
 					h => Map.Getitem.started -= h)
-				.Subscribe(context =>
-				{
-					var screenPos = context.ReadValue<Vector2>();
-					_startDrag.OnNext(screenPos);
-				})
+				.Subscribe(_ => _startDrag.OnNext(PointerPos))
 				.AddTo(_disposables);
 		}
 	}
