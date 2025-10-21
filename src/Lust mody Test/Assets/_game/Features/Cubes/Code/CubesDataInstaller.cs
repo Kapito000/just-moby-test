@@ -23,14 +23,15 @@ namespace Features.Cubes
 
 			Container
 				.Bind<CubesConfigsCollection>()
+				.FromInstance(_cubesConfigsCollection)
 				.AsSingle()
-				.WhenInjectedInto<ICubesDataProvider>();
+				.WhenInjectedInto<ICubesDataCollectionProvider>();
 		}
 
 		void BindCubesDataProvider()
 		{
 			Container
-				.BindInterfacesTo<CubesDataProvider>()
+				.BindInterfacesTo<CubesDataCollectionProvider>()
 				.AsSingle();
 		}
 	}
