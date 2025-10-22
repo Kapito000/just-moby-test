@@ -13,8 +13,16 @@ namespace Features.Cubes
 
 		public override void InstallBindings()
 		{
+			BindGameCubeFactory();
 			BindCubesDataProvider();
 			BindCubesConfigsCollection();
+		}
+
+		void BindGameCubeFactory()
+		{
+			Container
+				.BindInterfacesTo<GameCubeFactory>()
+				.AsSingle();
 		}
 
 		void BindCubesConfigsCollection()

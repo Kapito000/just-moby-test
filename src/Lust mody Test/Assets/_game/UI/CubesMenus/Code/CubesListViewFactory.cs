@@ -15,7 +15,7 @@ namespace UI.CubesMenus
 			var itemPrefab = _assetProvider.Load(AssetKeys.CubeListItemView);
 			var itemObj = _instantiator.InstantiatePrefab(itemPrefab, parent);
 
-			if (itemObj.TryGetComponent<CubeListItemView>(out var itemView) == false)
+			if (false == itemObj.TryGetComponent<CubeListItemView>(out var itemView))
 				Debug.LogError("Failed to create item view");
 
 			return itemView;
