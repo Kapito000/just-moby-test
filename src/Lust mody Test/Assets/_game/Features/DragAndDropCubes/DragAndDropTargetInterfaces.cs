@@ -1,4 +1,4 @@
-namespace Features.DragAndDropServices
+namespace Features.DragAndDropCubes
 {
 	public interface IDragTarget
 	{

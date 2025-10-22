@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.Assertions;
 using Zenject;
 
-namespace Features.DragAndDropServices
+namespace Features.DragAndDropCubes
 {
 	public sealed class DragAndDropSystemInstaller : MonoInstaller
 	{

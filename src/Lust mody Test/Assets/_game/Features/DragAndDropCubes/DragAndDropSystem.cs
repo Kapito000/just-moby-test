@@ -5,7 +5,7 @@ using UniRx;
 using UnityEngine;
 using Zenject;
 
-namespace Features.DragAndDropServices
+namespace Features.DragAndDropCubes
 {
 	public sealed class DragAndDropSystem : MonoBehaviour, IDragAndDropSystem
 	{
@@ -46,7 +46,6 @@ namespace Features.DragAndDropServices
 
 		public void TryDrop(Vector2 screenPos)
 		{ }
-
 
 		void MoveCube()
 		{

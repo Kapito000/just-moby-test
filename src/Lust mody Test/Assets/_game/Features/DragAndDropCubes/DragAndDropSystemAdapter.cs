@@ -3,7 +3,7 @@ using UniRx;
 using UnityEngine;
 using Zenject;
 
-namespace Features.DragAndDropServices
+namespace Features.DragAndDropCubes
 {
 	public sealed class DragAndDropSystemAdapter : MonoBehaviour
 	{

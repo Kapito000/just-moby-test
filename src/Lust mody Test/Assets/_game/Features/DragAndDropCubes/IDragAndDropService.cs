@@ -1,7 +1,7 @@
 using Infrastructure;
 using UnityEngine;
 
-namespace Features.DragAndDropServices
+namespace Features.DragAndDropCubes
 {
 	public interface IDragAndDropSystem : ISystem
 	{
