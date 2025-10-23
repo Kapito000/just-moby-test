@@ -5,6 +5,7 @@ namespace Features.Cubes
 {
 	public interface IGameCubeFactory : IFactory
 	{
+		IGameCube Create();
 		IGameCube Create(Vector2 pos, string cubeId);
 	}
 }

@@ -5,10 +5,11 @@ namespace Features.Cubes
 {
 	public interface IGameCube
 	{
-		string DataId { get; }
+		string DataId { get; set; }
+		Vector2 Position { get; set; }
 		void RefreshSkin(Sprite sprite);
-		void SetPosition(Vector3 pointerPosition);
 		IEnumerable<Vector2> SizePoints();
 		void Destroy();
+		void Enable(bool enable);
 	}
 }

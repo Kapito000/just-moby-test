@@ -12,32 +12,31 @@ namespace Features.Towers
 		[ReadOnly]
 		[SerializeField] List<CubePlacement> _placements;
 
-		IPlaceCondition[] _placeConditions;
+		[Inject] IGameCubeFactory _gameCubeFactory;
 
-		[Inject]
-		void Construct(IPlaceCondition[] placeConditions)
+		public void Place(string cubeDataId, Vector2 pos)
 		{
-			_placeConditions = placeConditions;
-		}
-		
-		public void Place(IGameCube cube)
-		{
-			if (CanPlace(cube) == false)
+			if (IsTowerEmpty() == false)
 			{
-				cube.Destroy();
+				Debug.Log("Place cube to up of the tower.");
 				return;
 			}
+
+			var newCube = _gameCubeFactory.Create(pos, cubeDataId);
+			CreateNewPlacement(newCube);
 		}
 
-		bool CanPlace(IGameCube cube)
+		void CreateNewPlacement(IGameCube cube)
 		{
-			foreach (var condition in _placeConditions)
+			var placement = new CubePlacement()
 			{
-				if (condition.CanPlace(cube) == false)
-					return false;
-			}
+				Cube = cube,
+			};
 
-			return true;
+			_placements.Add(placement);
 		}
+
+		bool IsTowerEmpty() =>
+			_placements.Count == 0;
 	}
 }

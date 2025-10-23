@@ -16,8 +16,9 @@ namespace Features.DragAndDropCubes
 
 		[Inject] ISceneData _sceneData;
 		[Inject] IGameCubeFactory _gameCubeFactory;
+		[Inject] ICubesDataCollectionProvider _cubesDataProvider;
 
-		IGameCube _capturedCube;
+		IGameCube _cube;
 		UiRayCaster _uiRayCaster;
 		PhysicsRayCaster _physicsRaycaster;
 
@@ -44,6 +45,9 @@ namespace Features.DragAndDropCubes
 				.AddTo(this);
 
 			_placeConditions = ConstructPlaceConditions();
+
+			_cube = _gameCubeFactory.Create();
+			_cube.Enable(false);
 		}
 
 		public void TryStartDrag(Vector2 screenPos)
@@ -52,47 +56,72 @@ namespace Features.DragAndDropCubes
 			if (dragTarget == null)
 				return;
 
-			var id = dragTarget.CubeId;
-			var pos = _sceneData.Camera.ScreenToWorldPoint(screenPos).AsVector2();
-			var gameCube = _gameCubeFactory.Create(pos, id);
+			if (TryShowCube(screenPos, dragTarget) == false)
+				return;
 
-			HoldCube(gameCube);
+			HoldCube();
 		}
 
 		public void TryDrop(Vector2 screenPos)
 		{
-			foreach (var condition in _placeConditions)
+			if (TryPlaceCube() == false)
 			{
-				if (condition.Invoke(_capturedCube) == false)
-				{
-					_capturedCube.Destroy();
-					UnholdCube();
-					return;
-				}
+				UnholdCube();
+				return;
 			}
 
+			var pos = Camera.ScreenToWorldPoint(screenPos);
 			var dropTarget = _physicsRaycaster.CastRay<IDropTarget>(screenPos);
-			dropTarget.Place(_capturedCube);
+
+			dropTarget.Place(_cube.DataId, pos);
 
 			UnholdCube();
+		}
+
+		bool TryPlaceCube()
+		{
+			foreach (var condition in _placeConditions)
+				if (condition.Invoke(_cube) == false)
+					return false;
+
+			return true;
+		}
+
+		bool TryShowCube(Vector2 screenPos, IDragTarget dragTarget)
+		{
+			var cubeDataId = dragTarget.CubeId;
+			var pos = _sceneData.Camera.ScreenToWorldPoint(screenPos).AsVector2();
+			if (false == _cubesDataProvider.TryGetConfig(cubeDataId, out var config))
+			{
+				Debug.Log($"Failed to find config for \"{cubeDataId}\".");
+				return false;
+			}
+
+			_cube.DataId = cubeDataId;
+			_cube.RefreshSkin(config.Sprite);
+			_cube.Position = pos;
+			_cube.Enable(true);
+
+			return true;
 		}
 
 		void MoveCube()
 		{
 			var pos = _sceneData.Camera.ScreenToWorldPoint(PointerPosition).AsVector2();
-			_capturedCube.SetPosition(pos);
+			_cube.Position = pos;
 		}
 
-		void HoldCube(IGameCube cube)
+		void HoldCube()
 		{
 			_isHold = true;
-			_capturedCube = cube;
+			_cube.Enable(true);
 		}
 
 		void UnholdCube()
 		{
 			_isHold = false;
-			_capturedCube = null;
+			_cube.Enable(false);
+			_cube.Enable(false);
 		}
 
 		Func<IGameCube, bool>[] ConstructPlaceConditions()

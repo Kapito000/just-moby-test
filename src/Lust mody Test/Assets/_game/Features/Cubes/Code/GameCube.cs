@@ -10,6 +10,11 @@ namespace Features.Cubes
 		[SerializeField] Transform[] _sizePoints;
 
 		public string DataId { get; set; }
+		public Vector2 Position
+		{
+			get => transform.position;
+			set => transform.position = value;
+		}
 
 		void Awake()
 		{
@@ -21,15 +26,15 @@ namespace Features.Cubes
 			_spriteRenderer.sprite = sprite;
 		}
 
-		public void SetPosition(Vector3 pointerPosition)
-		{
-			transform.position = pointerPosition;
-		}
-
 		public IEnumerable<Vector2> SizePoints()
 		{
 			foreach (var sizePoint in _sizePoints)
 				yield return sizePoint.position;
+		}
+
+		public void Enable(bool enable)
+		{
+			gameObject.SetActive(enable);
 		}
 
 		public void Destroy()

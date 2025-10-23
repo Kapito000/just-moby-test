@@ -9,7 +9,7 @@ namespace Features.Cubes
 	{
 		[Inject] IInstantiator _instantiator;
 		[Inject] IAssetProvider _assetProvider;
-		[Inject] ICubesDataCollectionProvider _cubesDatatProvider;
+		[Inject] ICubesDataCollectionProvider _cubesDataProvider;
 
 		public IGameCube Create(Vector2 pos, string cubeId)
 		{
@@ -17,7 +17,7 @@ namespace Features.Cubes
 			var obj = _instantiator.InstantiatePrefab(prefab, pos, Quaternion.identity, null);
 
 			if (false == obj.TryGetComponent<GameCube>(out var gameCube) ||
-			    false == _cubesDatatProvider.TryGetConfig(cubeId, out var config))
+			    false == _cubesDataProvider.TryGetConfig(cubeId, out var config))
 			{
 				Debug.LogError("Failed to create game cube.");
 				return gameCube;
@@ -25,6 +25,17 @@ namespace Features.Cubes
 
 			gameCube.DataId = config.Id;
 			gameCube.RefreshSkin(config.Sprite);
+
+			return gameCube;
+		}
+
+		public IGameCube Create()
+		{
+			var prefab = _assetProvider.Load(AssetKeys.GameCube);
+			var obj = _instantiator.InstantiatePrefab(prefab, null);
+
+			if (false == obj.TryGetComponent<GameCube>(out var gameCube))
+				Debug.LogError("Failed to create game cube.");
 
 			return gameCube;
 		}
