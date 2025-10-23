@@ -10,6 +10,6 @@ namespace Features.DragAndDropCubes
 
 	public interface IDropTarget
 	{
-		void Place(string cubeDataId, Vector2 pos);
+		void Place(Vector2 pos, string cubeDataId);
 	}
 }

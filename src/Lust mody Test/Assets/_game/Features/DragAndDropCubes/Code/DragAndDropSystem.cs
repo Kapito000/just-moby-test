@@ -20,7 +20,6 @@ namespace Features.DragAndDropCubes
 
 		GameCube _cube;
 		UiRayCaster _uiRayCaster;
-		PhysicsRayCaster _physicsRaycaster;
 
 		Func<GameCube, bool>[] _placeConditions;
 
@@ -33,8 +32,6 @@ namespace Features.DragAndDropCubes
 		{
 			_uiRayCaster = new UiRayCaster(
 				sceneData.EventSystem, sceneData.GraphicRaycaster);
-
-			_physicsRaycaster = new PhysicsRayCaster(sceneData.Camera);
 		}
 
 		void Awake()
@@ -71,9 +68,9 @@ namespace Features.DragAndDropCubes
 			}
 
 			var pos = Camera.ScreenToWorldPoint(screenPos);
-			var dropTarget = _physicsRaycaster.CastRay<IDropTarget>(screenPos);
+			var dropTarget = PhysicsRayCaster.CastRay<IDropTarget>(pos);
 
-			dropTarget.Place(_cube.DataId, pos);
+			dropTarget.Place(pos, _cube.DataId);
 
 			UnholdCube();
 		}
@@ -101,6 +98,7 @@ namespace Features.DragAndDropCubes
 			_cube.RefreshSkin(config.Sprite);
 			_cube.Position = pos;
 			_cube.Enable(true);
+			_cube.EnableCollider(false);
 
 			return true;
 		}
@@ -161,8 +159,7 @@ namespace Features.DragAndDropCubes
 				{
 					foreach (var point in cube.SizePoints())
 					{
-						var screenPos = Camera.WorldToScreenPoint(point);
-						var dropTarget = _physicsRaycaster.CastRay<IDropTarget>(screenPos);
+						var dropTarget = PhysicsRayCaster.CastRay<IDropTarget>(point);
 						if (dropTarget == null)
 							return false;
 					}
