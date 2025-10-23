@@ -15,10 +15,12 @@ namespace Features.DragAndDropCubes
 		[SerializeField] bool _isHold;
 
 		[Inject] ISceneData _sceneData;
+		[Inject] ICubePlacer _cubePlacer;
 		[Inject] IGameCubeFactory _gameCubeFactory;
 		[Inject] ICubesDataCollectionProvider _cubesDataProvider;
 
 		GameCube _cube;
+		GameCube _towerCube;
 		UiRayCaster _uiRayCaster;
 
 		Func<GameCube, bool>[] _placeConditions;
@@ -49,52 +51,20 @@ namespace Features.DragAndDropCubes
 
 		public void TryStartDrag(Vector2 screenPos)
 		{
-			if (TryDragUiCube(screenPos) == false)
+			if (TryDragUiCube(screenPos))
 				return;
 
-			if (TryDragCube() == false)
+			if (TryDragCube(screenPos))
 				return;
-		}
-
-		bool TryDragCube()
-		{
-			PhysicsRayCaster.CastRay<GameCube>();
-			throw new NotImplementedException();
-		}
-
-		bool TryDragUiCube(Vector2 screenPos)
-		{
-			var dragTarget = _uiRayCaster.CastRay<IDragTarget>(screenPos);
-			if (dragTarget == null)
-				return false;
-
-			if (TryShowCube(screenPos, dragTarget) == false)
-				return false;
-
-			HoldCube();
-
-			return true;
 		}
 
 		public void TryDrop(Vector2 screenPos)
 		{
-			if (TryPlaceCube() == false)
-			{
-				UnholdCube();
+			if (TryDropToTower(screenPos))
 				return;
-			}
 
-			var pos = Camera.ScreenToWorldPoint(screenPos);
-			var placer = PhysicsRayCaster.CastRay<ICubePlacer>(pos);
-			if (placer == null)
-			{
-				UnholdCube();
+			if (TryRemoveCube(screenPos))
 				return;
-			}
-
-			placer.Place(pos, _cube.DataId);
-
-			UnholdCube();
 		}
 
 		public bool CubeInCameraView(GameCube cube)
@@ -111,6 +81,81 @@ namespace Features.DragAndDropCubes
 					return false;
 				}
 			}
+
+			return true;
+		}
+
+		bool TryRemoveCube(Vector2 screenPos)
+		{
+			if (_towerCube == null)
+				return false;
+
+			var origin = _sceneData.Camera.ScreenToWorldPoint(screenPos);
+			var hit = Physics2D.Raycast(origin, Vector2.zero);
+
+			if (hit.collider == null)
+				return false;
+
+			if (hit.collider.CompareTag(Constants.Tag.RemoveCubeArea) == false)
+			{
+				_towerCube.Unselect();
+				UnholdCube();
+				return false;
+			}
+
+			_cubePlacer.Remove(_towerCube);
+			return true;
+		}
+
+		bool TryDropToTower(Vector2 screenPos)
+		{
+			if (_isHold == false)
+				return false;
+			
+			if (TryPlaceCube() == false)
+			{
+				UnholdCube();
+				return false;
+			}
+
+			var pos = Camera.ScreenToWorldPoint(screenPos);
+			var placer = PhysicsRayCaster.CastRay<ICubePlacer>(pos);
+			if (placer == null)
+			{
+				UnholdCube();
+				return false;
+			}
+
+			placer.Place(pos, _cube.DataId);
+
+			UnholdCube();
+
+			return true;
+		}
+
+		bool TryDragCube(Vector2 screenPos)
+		{
+			var pos = Camera.ScreenToWorldPoint(screenPos);
+			var gameCube = PhysicsRayCaster.CastRay<GameCube>(pos);
+			if (gameCube == null)
+				return false;
+
+			gameCube.Select();
+			HoldCube(gameCube);
+
+			return true;
+		}
+
+		bool TryDragUiCube(Vector2 screenPos)
+		{
+			var dragTarget = _uiRayCaster.CastRay<IDragTarget>(screenPos);
+			if (dragTarget == null)
+				return false;
+
+			if (TryShowCube(screenPos, dragTarget) == false)
+				return false;
+
+			HoldCube();
 
 			return true;
 		}
@@ -155,10 +200,18 @@ namespace Features.DragAndDropCubes
 			_cube.Enable(true);
 		}
 
+		void HoldCube(GameCube cube)
+		{
+			_isHold = true;
+			_cube.Enable(true);
+			_towerCube = cube;
+		}
+
 		void UnholdCube()
 		{
 			_isHold = false;
 			_cube.Enable(false);
+			_towerCube = null;
 		}
 
 		Func<GameCube, bool>[] ConstructPlaceConditions()

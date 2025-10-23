@@ -49,7 +49,17 @@ namespace Features.Cubes
 		{
 			Destroy(gameObject);
 		}
-		
-		
+
+		public void Select()
+		{
+			var color = _spriteRenderer.color;
+			_spriteRenderer.color = new Color(color.r, color.g, color.b, 0.5f);
+		}
+
+		public void Unselect()
+		{
+			var color = _spriteRenderer.color;
+			_spriteRenderer.color = new Color(color.r, color.g, color.b, 1);
+		}
 	}
 }

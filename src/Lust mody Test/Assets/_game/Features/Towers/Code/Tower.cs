@@ -30,6 +30,33 @@ namespace Features.Towers
 			PlaceNextCube(pos, cubeDataId);
 		}
 
+		public void Remove(GameCube cube)
+		{
+			int removesIndex = -1;
+			for (var i = 0; i < _placements.Count; i++)
+			{
+				var placement = _placements[i];
+				if (placement.Cube == cube)
+				{
+					removesIndex = i;
+					break;
+				}
+			}
+
+			if (removesIndex < 0)
+				return;
+
+			var removesPlacement = _placements[removesIndex];
+			for (int i = removesIndex + 1; i < _placements.Count; i++)
+			{
+				var placement = _placements[i];
+				placement.Pos -= new Vector2(0, _verticalOffset);
+				placement.Cube.transform.position = placement.Pos;
+			}
+
+			_placements.RemoveAt(removesIndex);
+		}
+
 		void PlaceNextCube(Vector2 pos, string cubeDataId)
 		{
 			var gameCube = PhysicsRayCaster.CastRay<GameCube>(pos);

@@ -1,3 +1,4 @@
+using Features.Cubes;
 using UnityEngine;
 
 namespace Features.DragAndDropCubes
@@ -13,5 +14,6 @@ namespace Features.DragAndDropCubes
 	public interface ICubePlacer
 	{
 		void Place(Vector2 pos, string cubeDataId);
+		void Remove(GameCube cube);
 	}
 }

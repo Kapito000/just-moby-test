@@ -1,4 +1,5 @@
-﻿using Features.DragAndDropCubes;
+﻿using Features.Cubes;
+using Features.DragAndDropCubes;
 using UnityEngine;
 
 namespace Features.Towers
@@ -15,6 +16,11 @@ namespace Features.Towers
 		public void Place(Vector2 pos, string cubeDataId)
 		{
 			_placer.Place(pos, cubeDataId);
+		}
+
+		public void Remove(GameCube cube)
+		{
+			throw new System.NotImplementedException();
 		}
 	}
 }
