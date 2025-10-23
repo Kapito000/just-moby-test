@@ -136,6 +136,7 @@ GameObject:
   - component: {fileID: 2316113415094561289}
   - component: {fileID: 9036094546183902543}
   - component: {fileID: 8314556026824530905}
+  - component: {fileID: 8971981573393739676}
   m_Layer: 0
   m_Name: GameCube
   m_TagString: Untagged
@@ -278,3 +279,15 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.6786985, y: 1.6272727}
   m_EdgeRadius: 0
+--- !u!114 &8971981573393739676
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8341395756336261878}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f137b54abdc4d8bbbe0c4ab8c180694, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

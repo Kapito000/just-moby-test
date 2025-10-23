@@ -40,14 +40,14 @@ namespace Features.Cubes
 			gameObject.SetActive(enable);
 		}
 
-		public void Destroy()
-		{
-			Destroy(gameObject);
-		}
-
 		public void EnableCollider(bool enable)
 		{
 			_collider.enabled = enable;
+		}
+
+		public void Destroy()
+		{
+			Destroy(gameObject);
 		}
 	}
 }

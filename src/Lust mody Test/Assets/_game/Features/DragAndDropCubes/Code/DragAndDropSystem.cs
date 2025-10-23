@@ -68,11 +68,34 @@ namespace Features.DragAndDropCubes
 			}
 
 			var pos = Camera.ScreenToWorldPoint(screenPos);
-			var dropTarget = PhysicsRayCaster.CastRay<IDropTarget>(pos);
+			var placer = PhysicsRayCaster.CastRay<ICubePlacer>(pos);
+			if (placer == null)
+			{
+				UnholdCube();
+				return;
+			}
 
-			dropTarget.Place(pos, _cube.DataId);
+			placer.Place(pos, _cube.DataId);
 
 			UnholdCube();
+		}
+
+		public bool CubeInCameraView(GameCube cube)
+		{
+			var width = _sceneData.Camera.pixelWidth;
+			var height = _sceneData.Camera.pixelHeight;
+
+			foreach (var point in cube.SizePoints())
+			{
+				var screenPos = Camera.WorldToScreenPoint(point);
+				if (screenPos.x < 0 || screenPos.y > height ||
+				    screenPos.y < 0 || screenPos.x > width)
+				{
+					return false;
+				}
+			}
+
+			return true;
 		}
 
 		bool TryPlaceCube()
@@ -119,30 +142,13 @@ namespace Features.DragAndDropCubes
 		{
 			_isHold = false;
 			_cube.Enable(false);
-			_cube.Enable(false);
 		}
 
 		Func<GameCube, bool>[] ConstructPlaceConditions()
 		{
 			return new Func<GameCube, bool>[]
 			{
-				cube =>
-				{
-					var width = _sceneData.Camera.pixelWidth;
-					var height = _sceneData.Camera.pixelHeight;
-
-					foreach (var point in cube.SizePoints())
-					{
-						var screenPos = Camera.WorldToScreenPoint(point);
-						if (screenPos.x < 0 || screenPos.y > height ||
-						    screenPos.y < 0 || screenPos.x > width)
-						{
-							return false;
-						}
-					}
-
-					return true;
-				},
+				CubeInCameraView,
 				cube =>
 				{
 					foreach (var point in cube.SizePoints())
