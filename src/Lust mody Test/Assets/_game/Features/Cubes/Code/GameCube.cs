@@ -49,5 +49,7 @@ namespace Features.Cubes
 		{
 			Destroy(gameObject);
 		}
+		
+		
 	}
 }

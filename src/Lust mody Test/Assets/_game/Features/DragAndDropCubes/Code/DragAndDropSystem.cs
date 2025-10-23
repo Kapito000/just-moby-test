@@ -49,14 +49,31 @@ namespace Features.DragAndDropCubes
 
 		public void TryStartDrag(Vector2 screenPos)
 		{
+			if (TryDragUiCube(screenPos) == false)
+				return;
+
+			if (TryDragCube() == false)
+				return;
+		}
+
+		bool TryDragCube()
+		{
+			PhysicsRayCaster.CastRay<GameCube>();
+			throw new NotImplementedException();
+		}
+
+		bool TryDragUiCube(Vector2 screenPos)
+		{
 			var dragTarget = _uiRayCaster.CastRay<IDragTarget>(screenPos);
 			if (dragTarget == null)
-				return;
+				return false;
 
 			if (TryShowCube(screenPos, dragTarget) == false)
-				return;
+				return false;
 
 			HoldCube();
+
+			return true;
 		}
 
 		public void TryDrop(Vector2 screenPos)
