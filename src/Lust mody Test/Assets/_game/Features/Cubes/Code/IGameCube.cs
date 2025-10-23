@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Features.Cubes
@@ -7,5 +8,7 @@ namespace Features.Cubes
 		string DataId { get; }
 		void RefreshSkin(Sprite sprite);
 		void SetPosition(Vector3 pointerPosition);
+		IEnumerable<Vector2> SizePoints();
+		void Destroy();
 	}
 }

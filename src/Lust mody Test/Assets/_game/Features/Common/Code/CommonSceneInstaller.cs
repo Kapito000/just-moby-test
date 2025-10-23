@@ -15,14 +15,6 @@ namespace Features.Common
 		public override void InstallBindings()
 		{
 			BindCommonSceneData();
-			BindPositionConverter();
-		}
-
-		void BindPositionConverter()
-		{
-			Container
-				.BindInterfacesTo<PositionConverter>()
-				.AsSingle();
 		}
 
 		void BindCommonSceneData()
