@@ -7,6 +7,6 @@ namespace Features.Towers
 	[Serializable]
 	public struct CubePlacement
 	{
-		public IGameCube Cube;
+		public GameCube Cube;
 	}
 }

@@ -18,11 +18,11 @@ namespace Features.DragAndDropCubes
 		[Inject] IGameCubeFactory _gameCubeFactory;
 		[Inject] ICubesDataCollectionProvider _cubesDataProvider;
 
-		IGameCube _cube;
+		GameCube _cube;
 		UiRayCaster _uiRayCaster;
 		PhysicsRayCaster _physicsRaycaster;
 
-		Func<IGameCube, bool>[] _placeConditions;
+		Func<GameCube, bool>[] _placeConditions;
 
 		public Vector2 PointerPosition { get; set; }
 
@@ -124,9 +124,9 @@ namespace Features.DragAndDropCubes
 			_cube.Enable(false);
 		}
 
-		Func<IGameCube, bool>[] ConstructPlaceConditions()
+		Func<GameCube, bool>[] ConstructPlaceConditions()
 		{
-			return new Func<IGameCube, bool>[]
+			return new Func<GameCube, bool>[]
 			{
 				cube =>
 				{

@@ -4,7 +4,7 @@ using UnityEngine.Assertions;
 
 namespace Features.Cubes
 {
-	public class GameCube : MonoBehaviour, IGameCube
+	public class GameCube : MonoBehaviour
 	{
 		[SerializeField] SpriteRenderer _spriteRenderer;
 		[SerializeField] Transform[] _sizePoints;

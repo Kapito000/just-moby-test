@@ -26,7 +26,7 @@ namespace Features.Towers
 			CreateNewPlacement(newCube);
 		}
 
-		void CreateNewPlacement(IGameCube cube)
+		void CreateNewPlacement(GameCube cube)
 		{
 			var placement = new CubePlacement()
 			{

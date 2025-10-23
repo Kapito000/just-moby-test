@@ -11,7 +11,7 @@ namespace Features.Cubes
 		[Inject] IAssetProvider _assetProvider;
 		[Inject] ICubesDataCollectionProvider _cubesDataProvider;
 
-		public IGameCube Create(Vector2 pos, string cubeId)
+		public GameCube Create(Vector2 pos, string cubeId)
 		{
 			var prefab = _assetProvider.Load(AssetKeys.GameCube);
 			var obj = _instantiator.InstantiatePrefab(prefab, pos, Quaternion.identity, null);
@@ -29,7 +29,7 @@ namespace Features.Cubes
 			return gameCube;
 		}
 
-		public IGameCube Create()
+		public GameCube Create()
 		{
 			var prefab = _assetProvider.Load(AssetKeys.GameCube);
 			var obj = _instantiator.InstantiatePrefab(prefab, null);
