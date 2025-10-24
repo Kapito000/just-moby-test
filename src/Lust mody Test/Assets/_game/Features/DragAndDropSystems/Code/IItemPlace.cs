@@ -1,5 +1,9 @@
-﻿namespace Features.DragAndDropSystems
+﻿using Features.Towers;
+
+namespace Features.DragAndDropSystems
 {
-	public interface IItemPlace
-	{ }
+	public interface IItemPlacer
+	{
+		void Place(ItemPlaceData placeData);
+	}
 }

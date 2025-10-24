@@ -1,5 +1,4 @@
 ﻿using Features.Common;
-using Features.Items;
 using UnityEngine;
 using Zenject;
 
@@ -28,5 +27,13 @@ namespace Features.Towers
 
 			return true;
 		}
+	}
+
+	public sealed class PlaceFirstCondition : IItemPlaceCondition
+	{
+		[Inject] ITower _tower;
+
+		public bool CanPlace(ItemPlaceData placeData) =>
+			_tower.IsTowerEmpty();
 	}
 }

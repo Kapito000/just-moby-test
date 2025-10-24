@@ -15,24 +15,22 @@ namespace Features.Towers
 		[SerializeField] List<ItemPlacement> _placements;
 
 		[Inject] IItemFactory _itemFactory;
-		[Inject] IItemPlaceCondition[] _conditions;
 
-		public void Place(ItemPlaceData placeData)
+		public void AddFirst(ItemPlaceData placeData)
 		{
 			var (id, pos, size) = placeData;
+			var newItem = CreateItem(pos, id);
+			AddPlacement(pos, newItem);
+		}
 
-			foreach (var condition in _conditions)
-				if (condition.CanPlace(placeData) == false)
-					return;
-
-			if (IsTowerEmpty())
-			{
-				AddFirstItem(pos, id);
-				return;
-			}
-
+		public void AddNext(ItemPlaceData placeData)
+		{
+			var (id, pos, size) = placeData;
 			AddNextItem(pos, id);
 		}
+
+		public bool IsTowerEmpty() =>
+			_placements.Count == 0;
 
 		void AddNextItem(Vector2 pos, string id)
 		{
@@ -41,16 +39,11 @@ namespace Features.Towers
 			AddPlacement(nextItemPosition, newItem);
 		}
 
-		void AddFirstItem(Vector2 pos, string id)
-		{
-			var newItem = CreateItem(pos, id);
-			AddPlacement(pos, newItem);
-		}
-
 		IItem CreateItem(Vector2 pos, string id)
 		{
 			var item = _itemFactory.Create(pos, id);
-			var towerPlacer = item.gameObject.AddComponent<TowerPlacer>();
+			var placer = item.gameObject.AddComponent<TowerItemPlacer>();
+			placer.Init(this);
 			return item;
 		}
 
@@ -74,8 +67,5 @@ namespace Features.Towers
 			var pos = placement.Pos + new Vector2(x, y);
 			return pos;
 		}
-
-		bool IsTowerEmpty() =>
-			_placements.Count == 0;
 	}
 }

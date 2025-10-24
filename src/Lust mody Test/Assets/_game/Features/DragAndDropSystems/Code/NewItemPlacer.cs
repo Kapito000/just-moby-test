@@ -1,29 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using Features.Common;
+﻿using Features.Common;
 using Features.Items;
 using Features.Towers;
-using UniRx;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using Zenject;
 
 namespace Features.DragAndDropSystems
 {
 	public sealed class NewItemPlacer : INewItemPlacer
 	{
-		readonly List<RaycastResult> _raycastBuffer = new(16);
-
 		[Inject] ISceneData _sceneData;
 
-		Subject<IItemPlace> _placeItem = new();
+		IItemPlaceCondition[] _conditions;
 
-		IObservable<IItemPlace> PlaceItem => _placeItem;
+		public NewItemPlacer(
+			UiGraphicsCondition graphicsCondition,
+			CameraViewCondition cameraViewCondition)
+		{
+			_conditions = new IItemPlaceCondition[]
+			{
+				graphicsCondition,
+				cameraViewCondition,
+			};
+		}
 
 		public void Place(Vector2 screenPos, string id, IItemSize size)
 		{
 			var pos = _sceneData.Camera.ScreenToWorldPoint(screenPos);
-			if (false == CanPlace<ITowerPlace>(pos, out var towerPlacer))
+			if (false == CanPlace<IItemPlacer>(pos, out var placer))
 				return;
 
 			var placeData = new ItemPlaceData()
@@ -32,10 +35,15 @@ namespace Features.DragAndDropSystems
 				Pos = pos,
 				Size = size,
 			};
-			towerPlacer.Place(placeData);
+
+			foreach (var condition in _conditions)
+				if (condition.CanPlace(placeData) == false)
+					return;
+
+			placer.Place(placeData);
 		}
 
-		bool CanPlace<T>(Vector2 origin, out T place) where T : IItemPlace
+		bool CanPlace<T>(Vector2 origin, out T place) where T : IItemPlacer
 		{
 			var collider = Physics2D.OverlapPoint(origin);
 

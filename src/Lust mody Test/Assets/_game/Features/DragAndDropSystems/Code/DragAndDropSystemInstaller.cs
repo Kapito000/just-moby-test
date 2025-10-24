@@ -1,4 +1,3 @@
-using Features.Items;
 using UnityEngine;
 using UnityEngine.Assertions;
 using Zenject;

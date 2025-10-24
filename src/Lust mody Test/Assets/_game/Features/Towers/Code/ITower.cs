@@ -5,6 +5,8 @@ namespace Features.Towers
 {
 	public interface ITower
 	{
-		void Place(ItemPlaceData placeData);
+		void AddNext(ItemPlaceData placeData);
+		void AddFirst(ItemPlaceData placeData);
+		bool IsTowerEmpty();
 	}
 }

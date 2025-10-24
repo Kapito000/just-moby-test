@@ -1,7 +1,4 @@
-﻿using Features.Items;
-using UnityEngine;
-
-namespace Features.Towers
+﻿namespace Features.Towers
 {
 	public interface IItemPlaceCondition
 	{

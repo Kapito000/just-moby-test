@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Features.DragAndDropSystems;
+using UnityEngine;
 using UnityEngine.Assertions;
 using Zenject;
 
@@ -17,11 +18,13 @@ namespace Features.Towers
 		void BindPlaceConditions()
 		{
 			Container
-				.BindInterfacesTo<CameraViewCondition>()
+				.BindInterfacesAndSelfTo<CameraViewCondition>()
 				.AsCached();
-
 			Container
-				.BindInterfacesTo<UiGraphicsCondition>()
+				.BindInterfacesAndSelfTo<UiGraphicsCondition>()
+				.AsCached();
+			Container
+				.BindInterfacesAndSelfTo<PlaceFirstCondition>()
 				.AsCached();
 		}
 
