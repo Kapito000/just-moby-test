@@ -15,6 +15,11 @@ namespace Features.Items
 
 		[SerializeField] Transform[] _sizePoints;
 
+		public void SetPosition(Vector2 pos)
+		{
+			transform.position = pos;
+		}
+
 		public IEnumerable<Vector2> SizePoints()
 		{
 			foreach (var sizePoint in _sizePoints)

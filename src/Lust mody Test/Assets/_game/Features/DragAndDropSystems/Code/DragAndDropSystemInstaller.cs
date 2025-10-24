@@ -8,7 +8,6 @@ namespace Features.DragAndDropSystems
 	{
 		[SerializeField] DragSystem _dragSystem;
 		[SerializeField] DraggedItem _draggedItem;
-		[SerializeField] NewItemHolder _newItemHolder;
 		[SerializeField] DragAndDropSystem _dragAndDropSystem;
 
 		public override void InstallBindings()
@@ -50,11 +49,8 @@ namespace Features.DragAndDropSystems
 
 		void BindItemHolders()
 		{
-			Assert.IsNotNull(_newItemHolder);
-
 			Container
 				.BindInterfacesTo<ItemHolder>()
-				.FromInstance(_newItemHolder)
 				.AsSingle();
 		}
 

@@ -1,17 +1,18 @@
 ﻿using Infrastructure.GameStateMachines;
 using Infrastructure.GameStateMachines.States;
 using UI;
+using UnityEngine;
 using Zenject;
 
 namespace Infrastructure
 {
-	public class BootstrapInstaller : MonoInstaller
+	public class BootstrapInstaller : MonoBehaviour
 	{
 		[Inject] IBootEnter[] _bootEnters;
 		[Inject] IMainMediator _mainMediator;
 		[Inject] IGameStateMachine _gameStateMachine;
 
-		public override void Start()
+		public void Start()
 		{
 			EnterToBootGameState();
 		}

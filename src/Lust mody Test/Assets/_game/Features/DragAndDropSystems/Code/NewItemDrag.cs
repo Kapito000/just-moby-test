@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Features.Common;
 using UniRx;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -10,24 +11,25 @@ namespace Features.DragAndDropSystems
 {
 	public sealed class NewItemDrag : IDisposable, INewItemDrag
 	{
+		[Inject] ISceneData _sceneData;
+		
+		readonly Subject<INewItem> _dragItemSubject = new();
 		readonly List<RaycastResult> _raycastBuffer = new(16);
 
-		[Inject] EventSystem _eventSystem;
-		[Inject] GraphicRaycaster _graphicRaycaster;
-
-		Subject<INewItem> _dragItemSubject = new();
-
 		public IObservable<INewItem> DragItemStart => _dragItemSubject;
+		
+		EventSystem EventSystem => _sceneData.EventSystem;
+		GraphicRaycaster GraphicRaycaster => _sceneData.GraphicRaycaster;
 
 		public void TryDrag(Vector2 screenPos)
 		{
-			PointerEventData pointerData = new PointerEventData(_eventSystem)
+			PointerEventData pointerData = new PointerEventData(EventSystem)
 			{
 				position = screenPos,
 			};
 
 			_raycastBuffer.Clear();
-			_graphicRaycaster.Raycast(pointerData, _raycastBuffer);
+			GraphicRaycaster.Raycast(pointerData, _raycastBuffer);
 
 			for (int i = 0; i < _raycastBuffer.Count; i++)
 			{
