@@ -1,4 +1,5 @@
-﻿using Features.Items;
+﻿using System.Collections.Generic;
+using Features.Items;
 using UnityEngine;
 
 namespace Features.Towers
@@ -8,5 +9,6 @@ namespace Features.Towers
 		void AddNext(ItemPlaceData placeData);
 		void AddFirst(ItemPlaceData placeData);
 		bool IsTowerEmpty();
+		IReadOnlyList<ItemPlacement> Placements { get; }
 	}
 }

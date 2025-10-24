@@ -16,6 +16,19 @@ namespace Features.Towers
 
 		[Inject] IItemFactory _itemFactory;
 
+		public IReadOnlyList<ItemPlacement> Placements => _placements;
+
+		IItemPlaceCondition[] _nextItemConditions;
+
+		[Inject]
+		void Construct(CameraViewCondition cameraViewCondition)
+		{
+			_nextItemConditions = new IItemPlaceCondition[]
+			{
+				cameraViewCondition,
+			};
+		}
+
 		public void AddFirst(ItemPlaceData placeData)
 		{
 			var (id, pos, size) = placeData;
@@ -36,10 +49,34 @@ namespace Features.Towers
 		{
 			var nextItemPosition = NextItemPosition();
 			var newItem = CreateItem(pos, id);
+
+			if (CanAddNextItem(pos, id, newItem) == false)
+			{
+				Destroy(newItem.gameObject);
+				return;
+			}
+
 			AddPlacement(nextItemPosition, newItem);
 		}
 
-		IItem CreateItem(Vector2 pos, string id)
+		bool CanAddNextItem(Vector2 pos, string id, Item newItem)
+		{
+			var placeData = new ItemPlaceData()
+			{
+				Id = id,
+				Pos = pos,
+				Size = newItem,
+			};
+			foreach (var condition in _nextItemConditions)
+			{
+				if (condition.CanPlace(placeData) == false)
+					return false;
+			}
+
+			return true;
+		}
+
+		Item CreateItem(Vector2 pos, string id)
 		{
 			var item = _itemFactory.Create(pos, id);
 			var placer = item.gameObject.AddComponent<TowerItemPlacer>();
