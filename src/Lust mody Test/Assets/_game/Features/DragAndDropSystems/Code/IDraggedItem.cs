@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Features.Items;
+using UnityEngine;
 
 namespace Features.DragAndDropSystems
 {
@@ -8,5 +9,6 @@ namespace Features.DragAndDropSystems
 		void SetSkin(Sprite skin);
 		void Show();
 		void Hide();
+		IItemSize Size { get; }
 	}
 }

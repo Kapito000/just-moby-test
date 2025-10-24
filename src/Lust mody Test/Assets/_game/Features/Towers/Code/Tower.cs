@@ -15,23 +15,43 @@ namespace Features.Towers
 		[SerializeField] List<ItemPlacement> _placements;
 
 		[Inject] IItemFactory _itemFactory;
-
 		[Inject] IItemPlaceCondition[] _conditions;
 
-		public void Place(Vector2 pos, IItem item)
+		public void Place(ItemPlaceData placeData)
 		{
+			var (id, pos, size) = placeData;
+
 			foreach (var condition in _conditions)
-				if (condition.CanPlace(pos, item) == false)
+				if (condition.CanPlace(placeData) == false)
 					return;
 
 			if (IsTowerEmpty())
 			{
-				AddPlacement(pos, item);
+				AddFirstItem(pos, id);
 				return;
 			}
 
+			AddNextItem(pos, id);
+		}
+
+		void AddNextItem(Vector2 pos, string id)
+		{
 			var nextItemPosition = NextItemPosition();
-			AddPlacement(nextItemPosition, item);
+			var newItem = CreateItem(pos, id);
+			AddPlacement(nextItemPosition, newItem);
+		}
+
+		void AddFirstItem(Vector2 pos, string id)
+		{
+			var newItem = CreateItem(pos, id);
+			AddPlacement(pos, newItem);
+		}
+
+		IItem CreateItem(Vector2 pos, string id)
+		{
+			var item = _itemFactory.Create(pos, id);
+			var towerPlacer = item.gameObject.AddComponent<TowerPlacer>();
+			return item;
 		}
 
 		void AddPlacement(Vector2 pos, IItem item)

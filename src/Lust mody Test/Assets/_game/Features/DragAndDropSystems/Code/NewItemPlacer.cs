@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Features.Common;
 using Features.Items;
+using Features.Towers;
 using UniRx;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -19,13 +20,19 @@ namespace Features.DragAndDropSystems
 
 		IObservable<IItemPlace> PlaceItem => _placeItem;
 
-		public void Place(Vector2 screenPos, IItem item)
+		public void Place(Vector2 screenPos, string id, IItemSize size)
 		{
 			var pos = _sceneData.Camera.ScreenToWorldPoint(screenPos);
 			if (false == CanPlace<ITowerPlace>(pos, out var towerPlacer))
 				return;
 
-			towerPlacer.Place(pos, item);
+			var placeData = new ItemPlaceData()
+			{
+				Id = id,
+				Pos = pos,
+				Size = size,
+			};
+			towerPlacer.Place(placeData);
 		}
 
 		bool CanPlace<T>(Vector2 origin, out T place) where T : IItemPlace

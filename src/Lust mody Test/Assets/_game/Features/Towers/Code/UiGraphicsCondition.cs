@@ -18,9 +18,9 @@ namespace Features.Towers
 		EventSystem EventSystem => _sceneData.EventSystem;
 		GraphicRaycaster Raycaster => _sceneData.GraphicRaycaster;
 
-		public bool CanPlace(Vector2 pos, IItem item)
+		public bool CanPlace(ItemPlaceData placeData)
 		{
-			foreach (var point in item.SizePoints())
+			foreach (var point in placeData.Size.SizePoints())
 			{
 				var screenPos = Camera.WorldToScreenPoint(point);
 

@@ -5,6 +5,6 @@ namespace Features.DragAndDropSystems
 {
 	public interface INewItemPlacer
 	{
-		void Place(Vector2 screenPos, IItem item);
+		void Place(Vector2 screenPos, string id, IItemSize size);
 	}
 }

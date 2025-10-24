@@ -11,20 +11,16 @@ namespace Features.DragAndDropSystems
 	public sealed class DragAndDropSystem : MonoBehaviour, IDragAndDropSystem,
 		IBootEnter
 	{
-		static readonly Vector2 _spawnPos = new(-100, -100);
-
 		[Inject] ISceneData _sceneData;
 		[Inject] IDragSystem _dragSystem;
-		[Inject] IItemFactory _itemFactory;
 		[Inject] INewItemDrag _newItemDrag;
+		[Inject] IDraggedItem _draggedItem;
 		[Inject] IBaseInputMap _baseInputMap;
 		[Inject] INewItemPlacer _newItemPlacer;
 		[Inject] IItemsDataCollectionProvider _itemsDataProvider;
 
 		IItemHolder _itemHolder;
-		INewItemHolder _newItemHolder = new NewItemHolder();
-
-		Camera Camera => _sceneData.Camera;
+		readonly INewItemHolder _newItemHolder = new NewItemHolder();
 
 		void IBootEnter.Execute()
 		{
@@ -55,7 +51,7 @@ namespace Features.DragAndDropSystems
 			switch (_itemHolder)
 			{
 				case INewItemHolder newItemHolder:
-					_newItemPlacer.Place(screenPos, newItemHolder.Item);
+					_newItemPlacer.Place(screenPos, newItemHolder.Id, _draggedItem.Size);
 					break;
 				case ITowerItemHolder towerItemHolder:
 					break;
@@ -73,8 +69,7 @@ namespace Features.DragAndDropSystems
 				return;
 			}
 
-			var item = _itemFactory.Create(_spawnPos, id);
-			_newItemHolder.Hold(item);
+			_newItemHolder.Hold(id);
 			_itemHolder = _newItemHolder;
 			DragSystemStartDrag(config);
 		}

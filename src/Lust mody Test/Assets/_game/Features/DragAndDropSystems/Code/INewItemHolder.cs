@@ -1,11 +1,9 @@
-﻿using Features.Items;
-
-namespace Features.DragAndDropSystems
+﻿namespace Features.DragAndDropSystems
 {
 	public interface INewItemHolder : IItemHolder
 	{
-		IItem Item { get; }
-		void Hold(IItem item);
+		void Hold(string id);
 		void Unhold();
+		string Id { get; }
 	}
 }

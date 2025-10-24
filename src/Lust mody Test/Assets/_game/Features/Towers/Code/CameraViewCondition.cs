@@ -11,12 +11,12 @@ namespace Features.Towers
 
 		Camera Camera => _sceneData.Camera;
 
-		public bool CanPlace(Vector2 pos, IItem item)
+		public bool CanPlace(ItemPlaceData placeData)
 		{
 			var width = _sceneData.Camera.pixelWidth;
 			var height = _sceneData.Camera.pixelHeight;
 
-			foreach (var point in item.SizePoints())
+			foreach (var point in placeData.Size.SizePoints())
 			{
 				var screenPos = Camera.WorldToScreenPoint(point);
 				if (screenPos.x < 0 || screenPos.y > height ||

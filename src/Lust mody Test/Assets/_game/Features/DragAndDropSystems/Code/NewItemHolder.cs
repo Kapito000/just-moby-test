@@ -1,21 +1,20 @@
-﻿using Features.Items;
-
-namespace Features.DragAndDropSystems
+﻿namespace Features.DragAndDropSystems
 {
 	public sealed class NewItemHolder : INewItemHolder
 	{
-		IItem _item;
-		IItemHolder _itemHolder = new ItemHolder();
+		readonly IItemHolder _itemHolder = new ItemHolder();
+		
+		string _id;
 
 		public bool IsHold => _itemHolder.IsHold;
-		public IItem Item => _item;
+		public string Id => _id;
 
 		public void Hold(bool value) =>
 			_itemHolder.Hold(value);
 
-		public void Hold(IItem item)
+		public void Hold(string id)
 		{
-			_item = item;
+			_id = id;
 			Hold(true);
 		}
 

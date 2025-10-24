@@ -1,10 +1,9 @@
-﻿using Features.Items;
-using UnityEngine;
+﻿using Features.Towers;
 
 namespace Features.DragAndDropSystems
 {
 	public interface ITowerPlace : IItemPlace
 	{
-		void Place(Vector2 pos, IItem item);
+		void Place(ItemPlaceData placeData);
 	}
 }

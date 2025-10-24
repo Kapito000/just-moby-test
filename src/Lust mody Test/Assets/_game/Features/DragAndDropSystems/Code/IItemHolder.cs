@@ -2,7 +2,7 @@
 {
 	public interface IItemHolder
 	{
+		bool IsHold { get; }
 		void Hold(bool value);
-		public bool IsHold { get; }
 	}
 }

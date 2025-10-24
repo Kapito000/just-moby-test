@@ -11,7 +11,7 @@ namespace Features.Items
 		[Inject] IAssetProvider _assetProvider;
 		[Inject] IItemsDataCollectionProvider _itemsDataProvider;
 
-		public IItem Create(Vector2 pos, string cubeId)
+		public Item Create(Vector2 pos, string cubeId)
 		{
 			var prefab = _assetProvider.Load(AssetKeys.GameCube);
 			var obj = _instantiator.InstantiatePrefab(prefab, pos, Quaternion.identity, null);

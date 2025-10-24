@@ -5,6 +5,6 @@ namespace Features.Towers
 {
 	public interface ITower
 	{
-		void Place(Vector2 pos, IItem item);
+		void Place(ItemPlaceData placeData);
 	}
 }
