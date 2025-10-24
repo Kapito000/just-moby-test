@@ -38,26 +38,21 @@ namespace Features.Towers
 
 		public void AddNext(ItemPlaceData placeData)
 		{
-			var (id, pos, size) = placeData;
-			AddNextItem(pos, id);
-		}
+			var id = placeData.Id;
+			var nextPos = NextItemPosition();
+			var newItem = CreateItem(nextPos, id);
 
-		public bool IsTowerEmpty() =>
-			_placements.Count == 0;
-
-		void AddNextItem(Vector2 pos, string id)
-		{
-			var nextItemPosition = NextItemPosition();
-			var newItem = CreateItem(pos, id);
-
-			if (CanAddNextItem(pos, id, newItem) == false)
+			if (CanAddNextItem(nextPos, id, newItem) == false)
 			{
 				Destroy(newItem.gameObject);
 				return;
 			}
 
-			AddPlacement(nextItemPosition, newItem);
+			AddPlacement(nextPos, newItem);
 		}
+
+		public bool IsTowerEmpty() =>
+			_placements.Count == 0;
 
 		bool CanAddNextItem(Vector2 pos, string id, Item newItem)
 		{
