@@ -18,10 +18,12 @@ namespace Features.Input
 
 		readonly Subject<Vector2> _drop = new();
 		readonly Subject<Vector2> _startDrag = new();
+		readonly Subject<Vector2> _pointerPosChanged = new();
 
 		public Vector2 PointerPos { get; private set; }
 		public IObservable<Vector2> Drop => _drop;
 		public IObservable<Vector2> StartDrag => _startDrag;
+		public IObservable<Vector2> PointerPosChanged => _pointerPosChanged;
 
 		public void Init()
 		{
@@ -44,6 +46,7 @@ namespace Features.Input
 		{
 			_drop.OnCompleted();
 			_startDrag.OnCompleted();
+			_pointerPosChanged.OnCompleted();
 
 			_disposables?.Dispose();
 		}
@@ -54,7 +57,12 @@ namespace Features.Input
 				.FromEvent<InputAction.CallbackContext>(
 					h => Map.Pointerpos.performed += h,
 					h => Map.Pointerpos.performed -= h)
-				.Subscribe(context => PointerPos = context.ReadValue<Vector2>())
+				.Subscribe(context =>
+				{
+					var value = context.ReadValue<Vector2>();
+					PointerPos = value;
+					_pointerPosChanged.OnNext(value);
+				})
 				.AddTo(_disposables);
 		}
 

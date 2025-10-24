@@ -1,13 +1,13 @@
 using System;
-using Features.Cubes;
+using Features.Items;
 using UnityEngine;
 
 namespace Features.Towers
 {
 	[Serializable]
-	public struct CubePlacement
+	public struct ItemPlacement
 	{
 		public Vector2 Pos;
-		public GameCube Cube;
+		public IItem Item;
 	}
 }

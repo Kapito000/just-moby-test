@@ -1,4 +1,4 @@
-﻿using UI.CubesMenus;
+﻿using UI.ItemsMenus;
 using UnityEngine;
 using UnityEngine.Assertions;
 using Zenject;
@@ -8,7 +8,7 @@ namespace UI
 	public class UiInstaller : MonoInstaller
 	{
 		[SerializeField] MainMediator _mainMediator;
-		[SerializeField] CubesListView _cubesListView;
+		[SerializeField] ItemsListView itemsListView;
 
 		public override void InstallBindings()
 		{
@@ -30,17 +30,17 @@ namespace UI
 		void BindCubesListViewFactory()
 		{
 			Container
-				.BindInterfacesTo<CubesListViewFactory>()
+				.BindInterfacesTo<ItemsListViewFactory>()
 				.AsSingle();
 		}
 
 		void BindCubesListView()
 		{
-			Assert.IsNotNull(_cubesListView);
+			Assert.IsNotNull(itemsListView);
 
 			Container
-				.BindInterfacesTo<CubesListView>()
-				.FromInstance(_cubesListView)
+				.BindInterfacesTo<ItemsListView>()
+				.FromInstance(itemsListView)
 				.AsSingle();
 		}
 	}

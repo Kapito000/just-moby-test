@@ -1,5 +1,5 @@
-using Features.Cubes;
-using UI.CubesMenus;
+using Features.Items;
+using UI.ItemsMenus;
 using UnityEngine;
 using Zenject;
 
@@ -7,8 +7,8 @@ namespace UI
 {
 	public sealed class MainMediator : MonoBehaviour, IMainMediator
 	{
-		[Inject] ICubesListView _cubesListView;
+		[Inject] IItemListView _itemListView;
 
-		public void CubesListViewUpdate(ICubeConfigDataProvider[] configs) => _cubesListView.UpdateList(configs);
+		public void CubesListViewUpdate(IItemConfigDataProvider[] configs) => _itemListView.UpdateList(configs);
 	}
 }

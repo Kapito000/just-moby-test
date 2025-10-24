@@ -1,10 +1,10 @@
-﻿using Features.Cubes;
+﻿using Features.Items;
 using Infrastructure;
 
 namespace UI
 {
 	public interface IMainMediator : ISystem
 	{
-		void CubesListViewUpdate(ICubeConfigDataProvider[] configs);
+		void CubesListViewUpdate(IItemConfigDataProvider[] configs);
 	}
 }

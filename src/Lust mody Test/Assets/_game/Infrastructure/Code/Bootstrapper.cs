@@ -5,26 +5,15 @@ using Zenject;
 
 namespace Infrastructure
 {
-	public class BootstrapInstaller : MonoInstaller, IInitializable
+	public class BootstrapInstaller : MonoInstaller
 	{
+		[Inject] IBootEnter[] _bootEnters;
 		[Inject] IMainMediator _mainMediator;
 		[Inject] IGameStateMachine _gameStateMachine;
 
-		public void Initialize()
+		public override void Start()
 		{
 			EnterToBootGameState();
-		}
-
-		public override void InstallBindings()
-		{
-			BindInitializable();
-		}
-
-		void BindInitializable()
-		{
-			Container
-				.BindInterfacesTo<BootstrapInstaller>()
-				.FromInstance(this);
 		}
 
 		void EnterToBootGameState()
@@ -32,7 +21,9 @@ namespace Infrastructure
 			var bootPayload = new BootPayload()
 			{
 				MainMediator = _mainMediator,
+				BootEnters = _bootEnters,
 			};
+
 			_gameStateMachine.Enter<Boot, BootPayload>(bootPayload);
 		}
 	}

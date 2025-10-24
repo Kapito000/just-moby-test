@@ -1,6 +1,6 @@
 ﻿using System.Linq;
-using Features.Cubes;
 using Features.Input;
+using Features.Items;
 using Infrastructure.LifeCycleStateMachines;
 using Zenject;
 
@@ -10,18 +10,22 @@ namespace Infrastructure.GameStateMachines.States
 	{
 		[Inject] IGameStateMachine _gameStateMachine;
 		[Inject] IBaseInputMapInit _baseInputMap;
-		[Inject] ICubesDataCollectionProvider _cubesDataCollectionProvider;
+		[Inject] IItemsDataCollectionProvider _itemsDataCollectionProvider;
 
 		public void Enter(BootPayload payload)
 		{
 			_baseInputMap.Init();
 			CubesListViewUpdate(payload);
+			
+			foreach (var bootEnter in payload.BootEnters) 
+				bootEnter.Execute();
+			
 			_gameStateMachine.Enter<GameLoop>();
 		}
 
 		void CubesListViewUpdate(BootPayload payload)
 		{
-			var configs = _cubesDataCollectionProvider.Configs().ToArray();
+			var configs = _itemsDataCollectionProvider.Configs().ToArray();
 			payload.MainMediator.CubesListViewUpdate(configs);
 		}
 	}

@@ -8,6 +8,7 @@ namespace Features.Input
 		Vector2 PointerPos { get; }
 		IObservable<Vector2> Drop { get; }
 		IObservable<Vector2> StartDrag { get; }
+		IObservable<Vector2> PointerPosChanged { get; }
 	}
 
 	public interface IBaseInputMapInit
