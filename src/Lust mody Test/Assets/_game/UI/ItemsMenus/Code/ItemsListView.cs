@@ -32,6 +32,7 @@ namespace UI.ItemsMenus
 			{
 				var item = _items[i];
 				var data = characters[i];
+				item.Id = data.Id;
 				item.UpdateView(data);
 				item.Show();
 			}

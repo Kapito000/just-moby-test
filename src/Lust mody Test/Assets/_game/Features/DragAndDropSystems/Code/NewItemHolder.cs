@@ -5,7 +5,7 @@ namespace Features.DragAndDropSystems
 	public sealed class NewItemHolder : INewItemHolder
 	{
 		IItem _item;
-		IItemHolder _itemHolder;
+		IItemHolder _itemHolder = new ItemHolder();
 
 		public bool IsHold => _itemHolder.IsHold;
 		public IItem Item => _item;
