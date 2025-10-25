@@ -1,4 +1,6 @@
-﻿namespace Features.DragAndDropSystems
+﻿using UnityEngine;
+
+namespace Features.DragAndDropSystems.ItemHolders
 {
 	public sealed class ItemHolder : IItemHolder
 	{
@@ -12,6 +14,8 @@
 		}
 
 		public void Accept(IItemHolderVisitor visitor)
-		{ }
+		{
+			Debug.LogError($"Has no a realization for \"{nameof(ItemHolder)}\".");
+		}
 	}
 }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Features.DragAndDropSystems.ItemStartDrags;
 using Features.Items;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -74,8 +75,15 @@ namespace Features.Towers
 		Item CreateItem(Vector2 pos, string id)
 		{
 			var item = _itemFactory.Create(pos, id);
-			var placer = item.gameObject.AddComponent<TowerItemPlacer>();
+
+			var obj = item.gameObject;
+
+			var placer = obj.AddComponent<TowerItemPlacer>();
 			placer.Init(this);
+
+			var towerItem = obj.AddComponent<TowerItem>();
+			towerItem.Id = id;
+
 			return item;
 		}
 

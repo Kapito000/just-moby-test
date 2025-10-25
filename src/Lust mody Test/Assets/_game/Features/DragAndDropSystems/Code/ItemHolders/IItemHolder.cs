@@ -1,4 +1,4 @@
-﻿namespace Features.DragAndDropSystems
+﻿namespace Features.DragAndDropSystems.ItemHolders
 {
 	public interface IItemHolder
 	{

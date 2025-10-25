@@ -1,4 +1,4 @@
-﻿namespace Features.DragAndDropSystems
+﻿namespace Features.DragAndDropSystems.ItemStartDrags
 {
 	public interface INewItem
 	{

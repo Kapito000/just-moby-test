@@ -1,4 +1,6 @@
 ﻿using Features.Common;
+using Features.DragAndDropSystems.ItemHolders;
+using Features.DragAndDropSystems.ItemStartDrags;
 using Features.Input;
 using Features.Items;
 using Infrastructure;
@@ -17,11 +19,13 @@ namespace Features.DragAndDropSystems
 		[Inject] IDraggedItem _draggedItem;
 		[Inject] IBaseInputMap _baseInputMap;
 		[Inject] INewItemPlacer _newItemPlacer;
+		[Inject] ITowerItemDrag _towerItemDrag;
+		[Inject] INewItemHolder _newItemHolder;
+		[Inject] ITowerItemHolder _towerItemHolder;
 		[Inject] IItemsDataCollectionProvider _itemsDataProvider;
 
 		IDropProcessor _dropProcessor;
 		IItemHolder _itemHolder;
-		readonly INewItemHolder _newItemHolder = new NewItemHolder();
 
 		void IBootEnter.Execute()
 		{
@@ -41,6 +45,10 @@ namespace Features.DragAndDropSystems
 				.Subscribe(StartNewItemDrag)
 				.AddTo(this);
 
+			_towerItemDrag.DragItemStart
+				.Subscribe(StartTowerItemDrag)
+				.AddTo(this);
+
 			_dropProcessor = new DropProcessor(_newItemPlacer);
 		}
 
@@ -54,7 +62,7 @@ namespace Features.DragAndDropSystems
 			_dropProcessor
 				.SetScreenPos(screenPos)
 				.SetDraggedItem(_draggedItem);
-			
+
 			_itemHolder.Accept(_dropProcessor);
 
 			_dragSystem.Stop();
@@ -63,15 +71,34 @@ namespace Features.DragAndDropSystems
 		void StartNewItemDrag(INewItem newItem)
 		{
 			var id = newItem.Id;
-			if (_itemsDataProvider.TryGetConfig(id, out var config) == false)
-			{
-				Debug.LogError($"Config not found: {id}");
+			if (TryGetConfig(id, out var config) == false)
 				return;
-			}
 
 			_newItemHolder.Hold(id);
 			_itemHolder = _newItemHolder;
 			DragSystemStartDrag(config);
+		}
+
+		void StartTowerItemDrag(ITowerItem towerItem)
+		{
+			var id = towerItem.Id;
+			if (TryGetConfig(id, out var config) == false)
+				return;
+
+			_towerItemHolder.Hold(true);
+			_itemHolder = _towerItemHolder;
+			DragSystemStartDrag(config);
+		}
+
+		bool TryGetConfig(string id, out IItemConfigDataProvider config)
+		{
+			if (_itemsDataProvider.TryGetConfig(id, out config) == false)
+			{
+				Debug.LogError($"Config not found: {id}");
+				return false;
+			}
+
+			return true;
 		}
 
 		void DragSystemStartDrag(IItemConfigDataProvider config)

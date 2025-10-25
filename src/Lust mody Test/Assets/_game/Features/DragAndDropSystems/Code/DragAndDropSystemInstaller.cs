@@ -1,3 +1,5 @@
+using Features.DragAndDropSystems.ItemHolders;
+using Features.DragAndDropSystems.ItemStartDrags;
 using UnityEngine;
 using UnityEngine.Assertions;
 using Zenject;
@@ -17,7 +19,24 @@ namespace Features.DragAndDropSystems
 			BindDraggedItem();
 			BindItemHolders();
 			BindNewItemDrag();
+			BindTowerItemDrag();
+			BindNewItemHolder();
+			BindTowerItemHolder();
 			BindDragAndDropService();
+		}
+
+		void BindTowerItemHolder()
+		{
+			Container
+				.BindInterfacesTo<TowerItemHolder>()
+				.AsSingle();
+		}
+
+		void BindNewItemHolder()
+		{
+			Container
+				.BindInterfacesTo<NewItemHolder>()
+				.AsSingle();
 		}
 
 		void BindItemPlacers()
@@ -58,6 +77,13 @@ namespace Features.DragAndDropSystems
 		{
 			Container
 				.BindInterfacesTo<NewItemDrag>()
+				.AsSingle();
+		}
+
+		void BindTowerItemDrag()
+		{
+			Container
+				.BindInterfacesTo<TowerItemDrag>()
 				.AsSingle();
 		}
 

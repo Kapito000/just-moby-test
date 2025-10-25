@@ -7,17 +7,17 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Zenject;
 
-namespace Features.DragAndDropSystems
+namespace Features.DragAndDropSystems.ItemStartDrags
 {
 	public sealed class NewItemDrag : IDisposable, INewItemDrag
 	{
 		[Inject] ISceneData _sceneData;
-		
+
 		readonly Subject<INewItem> _dragItemSubject = new();
 		readonly List<RaycastResult> _raycastBuffer = new(16);
 
 		public IObservable<INewItem> DragItemStart => _dragItemSubject;
-		
+
 		EventSystem EventSystem => _sceneData.EventSystem;
 		GraphicRaycaster GraphicRaycaster => _sceneData.GraphicRaycaster;
 
