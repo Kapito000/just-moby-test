@@ -59,6 +59,15 @@ namespace Features.Towers
 			AddPlacement(nextPos, newItem);
 		}
 
+		public void JustAddNext(ItemPlaceData placeData)
+		{
+			var id = placeData.Id;
+			var nextPos = placeData.Pos;
+			var newItem = CreateItem(nextPos, id);
+			
+			AddPlacement(nextPos, newItem);
+		}
+
 		public void RemoveItem(IItem item)
 		{
 			var removesIndex = _placements.FindIndex(p => p.Item == item);

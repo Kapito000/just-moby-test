@@ -1,5 +1,4 @@
-﻿using Features.DragAndDropSystems;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Assertions;
 using Zenject;
 
@@ -13,6 +12,14 @@ namespace Features.Towers
 		{
 			BindTower();
 			BindPlaceConditions();
+			BindTowerSaveLoadSystem();
+		}
+
+		void BindTowerSaveLoadSystem()
+		{
+			Container
+				.BindInterfacesTo<TowerSaveLoadSystem>()
+				.AsSingle();
 		}
 
 		void BindPlaceConditions()
