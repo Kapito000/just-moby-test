@@ -8,6 +8,8 @@ namespace Features.Items
 		[SerializeField] SpriteRenderer _skin;
 
 		public string Id { get; set; }
+		public GameObject GameObject => gameObject;
+
 		public Sprite Skin
 		{
 			set => _skin.sprite = value;

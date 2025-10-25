@@ -6,7 +6,8 @@ namespace Features.Items
 	{
 		string Id { get; }
 		Sprite Skin { set; }
-		
+		GameObject GameObject { get; }
+
 		void SetPosition(Vector2 pos);
 	}
 }

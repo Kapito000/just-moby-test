@@ -1,5 +1,6 @@
 ﻿using Features.Common;
 using Features.DragAndDropSystems.ItemHolders;
+using Features.DragAndDropSystems.ItemPlacers;
 using Features.DragAndDropSystems.ItemStartDrags;
 using Features.Input;
 using Features.Items;
@@ -21,10 +22,10 @@ namespace Features.DragAndDropSystems
 		[Inject] INewItemPlacer _newItemPlacer;
 		[Inject] ITowerItemDrag _towerItemDrag;
 		[Inject] INewItemHolder _newItemHolder;
+		[Inject] IDropProcessor _dropProcessor;
 		[Inject] ITowerItemHolder _towerItemHolder;
 		[Inject] IItemsDataCollectionProvider _itemsDataProvider;
 
-		IDropProcessor _dropProcessor;
 		IItemHolder _itemHolder;
 
 		void IBootEnter.Execute()
@@ -48,8 +49,6 @@ namespace Features.DragAndDropSystems
 			_towerItemDrag.DragItemStart
 				.Subscribe(StartTowerItemDrag)
 				.AddTo(this);
-
-			_dropProcessor = new DropProcessor(_newItemPlacer);
 		}
 
 		void TryStartDrag(Vector2 screenPos)
@@ -85,7 +84,7 @@ namespace Features.DragAndDropSystems
 			if (TryGetConfig(id, out var config) == false)
 				return;
 
-			_towerItemHolder.Hold(true);
+			_towerItemHolder.Hold(towerItem.Item);
 			_itemHolder = _towerItemHolder;
 			DragSystemStartDrag(config);
 		}

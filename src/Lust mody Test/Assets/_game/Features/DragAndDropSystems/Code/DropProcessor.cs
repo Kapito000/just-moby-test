@@ -1,4 +1,5 @@
 using Features.DragAndDropSystems.ItemHolders;
+using Features.DragAndDropSystems.ItemPlacers;
 using UnityEngine;
 
 namespace Features.DragAndDropSystems
@@ -6,13 +7,15 @@ namespace Features.DragAndDropSystems
 	public sealed class DropProcessor : IDropProcessor
 	{
 		INewItemPlacer _newItemPlacer;
+		ITowerItemDropProcessor _towerItemDropProcessor;
 
 		Vector2 _screenPos;
 		IDraggedItem _draggedItem;
 
-		public DropProcessor(INewItemPlacer newItemPlacer)
+		public DropProcessor(INewItemPlacer newItemPlacer, ITowerItemDropProcessor towerItemDropProcessor)
 		{
 			_newItemPlacer = newItemPlacer;
+			_towerItemDropProcessor = towerItemDropProcessor;
 		}
 
 		public IDropProcessor SetScreenPos(Vector2 screenPos)
@@ -26,7 +29,7 @@ namespace Features.DragAndDropSystems
 			_draggedItem = draggedItem;
 			return this;
 		}
-		
+
 		public void Visit(INewItemHolder newItemHolder)
 		{
 			_newItemPlacer.Place(_screenPos, newItemHolder.Id, _draggedItem.Size);
@@ -34,7 +37,7 @@ namespace Features.DragAndDropSystems
 
 		public void Visit(ITowerItemHolder towerItemHolder)
 		{
-			throw new System.NotImplementedException();
+			_towerItemDropProcessor.Process(_screenPos, towerItemHolder.Item);
 		}
 	}
 }

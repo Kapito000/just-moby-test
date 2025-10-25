@@ -1,6 +1,6 @@
 ﻿using Features.Towers;
 
-namespace Features.DragAndDropSystems
+namespace Features.DragAndDropSystems.ItemPlacers
 {
 	public interface IItemPlacer
 	{

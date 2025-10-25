@@ -1,4 +1,5 @@
 using Features.DragAndDropSystems.ItemHolders;
+using Features.DragAndDropSystems.ItemPlacers;
 using Features.DragAndDropSystems.ItemStartDrags;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -21,8 +22,32 @@ namespace Features.DragAndDropSystems
 			BindNewItemDrag();
 			BindTowerItemDrag();
 			BindNewItemHolder();
+			BindDropProcessor();
+			BindBaseItemPlacer();
 			BindTowerItemHolder();
 			BindDragAndDropService();
+			BindTowerItemDropProcessor();
+		}
+
+		void BindDropProcessor()
+		{
+			Container
+				.BindInterfacesTo<DropProcessor>()
+				.AsSingle();
+		}
+
+		void BindTowerItemDropProcessor()
+		{
+			Container
+				.BindInterfacesTo<TowerItemDropProcessor>()
+				.AsSingle();
+		}
+
+		void BindBaseItemPlacer()
+		{
+			Container
+				.Bind<BaseItemPlacer>()
+				.AsTransient();
 		}
 
 		void BindTowerItemHolder()

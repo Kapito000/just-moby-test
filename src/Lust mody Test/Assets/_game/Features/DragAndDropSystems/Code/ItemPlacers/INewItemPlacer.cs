@@ -1,7 +1,7 @@
 ﻿using Features.Items;
 using UnityEngine;
 
-namespace Features.DragAndDropSystems
+namespace Features.DragAndDropSystems.ItemPlacers
 {
 	public interface INewItemPlacer
 	{

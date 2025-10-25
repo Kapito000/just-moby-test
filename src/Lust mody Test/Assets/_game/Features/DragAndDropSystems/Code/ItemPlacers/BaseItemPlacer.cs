@@ -1,31 +1,29 @@
-﻿using Features.Common;
+﻿using System;
+using System.Collections.Generic;
+using Features.Common;
 using Features.Items;
 using Features.Towers;
 using UnityEngine;
 using Zenject;
 
-namespace Features.DragAndDropSystems
+namespace Features.DragAndDropSystems.ItemPlacers
 {
-	public sealed class NewItemPlacer : INewItemPlacer
+	public class BaseItemPlacer
 	{
 		[Inject] ISceneData _sceneData;
 
-		IItemPlaceCondition[] _conditions;
+		Camera Camera => _sceneData.Camera;
 
-		public NewItemPlacer(
-			UiGraphicsCondition graphicsCondition,
-			CameraViewCondition cameraViewCondition)
+		IEnumerable<IItemPlaceCondition> _conditions;
+
+		public void AddConditions(IEnumerable<IItemPlaceCondition> conditions)
 		{
-			_conditions = new IItemPlaceCondition[]
-			{
-				graphicsCondition,
-				cameraViewCondition,
-			};
+			_conditions = conditions ?? Array.Empty<IItemPlaceCondition>();
 		}
 
 		public void Place(Vector2 screenPos, string id, IItemSize size)
 		{
-			var pos = _sceneData.Camera.ScreenToWorldPoint(screenPos);
+			var pos = Camera.ScreenToWorldPoint(screenPos);
 			if (false == CanPlace<IItemPlacer>(pos, out var placer))
 				return;
 
