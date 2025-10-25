@@ -7,17 +7,20 @@ using Infrastructure;
 using UniRx;
 using UnityEngine;
 using Zenject;
-using Object = UnityEngine.Object;
 
-namespace Features.DeletingItems
+namespace Features.ItemAnimations
 {
-	public sealed class ItemDeletingSystem : IItemDeletingSystem, IBootEnter, IDisposable
+	public sealed class ItemDeletingAnimationSystem : IItemDeletingAnimationSystem, IBootEnter, IDisposable
 	{
 		[Inject] ITower _tower;
 		[Inject(Id = DiKey.RemoveItemArea)]
 		Transform _removeArea;
 
 		CompositeDisposable _disposables = new();
+
+		Subject<IItem> _animationCompleted = new();
+
+		public IObservable<IItem> AnimationCompleted => _animationCompleted;
 
 		public void Execute()
 		{
@@ -33,14 +36,14 @@ namespace Features.DeletingItems
 
 		void OnTowerItemRemoved(IItem item)
 		{
-			const float duration = 1f;
+			const float duration = .2f;
 
 			var obj = item.GameObject;
 
 			DOTween.Sequence()
-				.Append(obj.transform.DOMove(_removeArea.position, duration))
-				.Append(obj.transform.DOScale(Vector3.zero, duration))
-				.OnComplete(() => Object.Destroy(obj))
+				.Join(obj.transform.DOMove(_removeArea.position, duration).SetEase(Ease.Linear))
+				.Join(obj.transform.DOScale(Vector3.zero, duration).SetEase(Ease.Linear))
+				.OnComplete(() => _animationCompleted.OnNext(item))
 				;
 		}
 	}

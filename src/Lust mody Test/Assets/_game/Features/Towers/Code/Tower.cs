@@ -80,6 +80,7 @@ namespace Features.Towers
 			}
 
 			_placements.RemoveAt(removesIndex);
+			_removedItem.OnNext(item);
 		}
 
 		public bool IsTowerEmpty() =>

@@ -54,6 +54,7 @@ namespace Features.DragAndDropSystems
 		void TryStartDrag(Vector2 screenPos)
 		{
 			_newItemDrag.TryDrag(screenPos);
+			_towerItemDrag.TryDrag(screenPos);
 		}
 
 		void TryDrop(Vector2 screenPos)
