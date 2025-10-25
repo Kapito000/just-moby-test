@@ -10,5 +10,8 @@
 		{
 			_isHold = value;
 		}
+
+		public void Accept(IItemHolderVisitor visitor)
+		{ }
 	}
 }

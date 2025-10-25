@@ -19,6 +19,7 @@ namespace Features.DragAndDropSystems
 		[Inject] INewItemPlacer _newItemPlacer;
 		[Inject] IItemsDataCollectionProvider _itemsDataProvider;
 
+		IDropProcessor _dropProcessor;
 		IItemHolder _itemHolder;
 		readonly INewItemHolder _newItemHolder = new NewItemHolder();
 
@@ -39,6 +40,8 @@ namespace Features.DragAndDropSystems
 			_newItemDrag.DragItemStart
 				.Subscribe(StartNewItemDrag)
 				.AddTo(this);
+
+			_dropProcessor = new DropProcessor(_newItemPlacer);
 		}
 
 		void TryStartDrag(Vector2 screenPos)
@@ -48,14 +51,11 @@ namespace Features.DragAndDropSystems
 
 		void TryDrop(Vector2 screenPos)
 		{
-			switch (_itemHolder)
-			{
-				case INewItemHolder newItemHolder:
-					_newItemPlacer.Place(screenPos, newItemHolder.Id, _draggedItem.Size);
-					break;
-				case ITowerItemHolder towerItemHolder:
-					break;
-			}
+			_dropProcessor
+				.SetScreenPos(screenPos)
+				.SetDraggedItem(_draggedItem);
+			
+			_itemHolder.Accept(_dropProcessor);
 
 			_dragSystem.Stop();
 		}

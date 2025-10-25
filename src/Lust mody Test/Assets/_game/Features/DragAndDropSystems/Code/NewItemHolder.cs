@@ -22,5 +22,10 @@
 		{
 			Hold(false);
 		}
+
+		public void Accept(IItemHolderVisitor visitor)
+		{
+			visitor.Visit(this);
+		}
 	}
 }
