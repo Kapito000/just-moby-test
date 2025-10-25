@@ -21,7 +21,7 @@ namespace Features.DragAndDropSystems.ItemStartDrags
 		EventSystem EventSystem => _sceneData.EventSystem;
 		GraphicRaycaster GraphicRaycaster => _sceneData.GraphicRaycaster;
 
-		public void TryDrag(Vector2 screenPos)
+		public bool TryDrag(Vector2 screenPos)
 		{
 			PointerEventData pointerData = new PointerEventData(EventSystem)
 			{
@@ -38,9 +38,11 @@ namespace Features.DragAndDropSystems.ItemStartDrags
 				if (obj.TryGetComponent<INewItem>(out var item))
 				{
 					_dragItemSubject.OnNext(item);
-					return;
+					return true;
 				}
 			}
+
+			return false;
 		}
 
 		public void Dispose()

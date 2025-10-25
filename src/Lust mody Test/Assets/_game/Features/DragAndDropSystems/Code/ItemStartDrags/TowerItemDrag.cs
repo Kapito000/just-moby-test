@@ -10,6 +10,8 @@ namespace Features.DragAndDropSystems.ItemStartDrags
 	{
 		[Inject] ISceneData _sceneData;
 
+		Collider2D[] _resultCache = new Collider2D[8];
+
 		readonly Subject<ITowerItem> _dragItemSubject = new();
 
 		public IObservable<ITowerItem> DragItemStart => _dragItemSubject;
@@ -19,10 +21,18 @@ namespace Features.DragAndDropSystems.ItemStartDrags
 		public void TryDrag(Vector2 screenPos)
 		{
 			var point = Camera.ScreenToWorldPoint(screenPos);
-			var collider = Physics2D.OverlapPoint(point);
+			var hitCount = Physics2D.OverlapPointNonAlloc(point, _resultCache);
 
-			if (collider.gameObject.TryGetComponent<ITowerItem>(out var item))
-				_dragItemSubject.OnNext(item);
+			if (hitCount == 0)
+				return;
+
+			for (int i = 0; i < hitCount; i++)
+			{
+				var collider = _resultCache[i];
+
+				if (collider.gameObject.TryGetComponent<ITowerItem>(out var item))
+					_dragItemSubject.OnNext(item);
+			}
 		}
 
 		public void Dispose()
