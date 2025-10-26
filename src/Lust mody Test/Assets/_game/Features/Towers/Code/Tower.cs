@@ -22,8 +22,11 @@ namespace Features.Towers
 		[Inject] IItemFactory _itemFactory;
 
 		Subject<IItem> _removedItem = new();
+		Subject<ItemPlacement> _itemPlaced = new();
 
 		public IObservable<IItem> RemovedItem => _removedItem;
+		public IObservable<ItemPlacement> ItemPlaced => _itemPlaced;
+		
 		public IReadOnlyList<ItemPlacement> Placements => _placements;
 
 		IItemPlaceCondition[] _nextItemConditions;
@@ -64,7 +67,7 @@ namespace Features.Towers
 			var id = placeData.Id;
 			var nextPos = placeData.Pos;
 			var newItem = CreateItem(nextPos, id);
-			
+
 			AddPlacement(nextPos, newItem);
 		}
 
@@ -99,6 +102,9 @@ namespace Features.Towers
 		{
 			_removedItem.OnCompleted();
 			_removedItem?.Dispose();
+			
+			_itemPlaced.OnCompleted();
+			_itemPlaced?.Dispose();
 		}
 
 		bool CanAddNextItem(Vector2 pos, string id, Item newItem)
@@ -144,6 +150,7 @@ namespace Features.Towers
 			_placements.Add(placement);
 
 			item.SetPosition(pos);
+			_itemPlaced.OnNext(placement);
 		}
 
 		Vector2 NextItemPosition()

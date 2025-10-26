@@ -12,6 +12,7 @@ namespace Features.Towers
 		bool IsTowerEmpty();
 		IReadOnlyList<ItemPlacement> Placements { get; }
 		IObservable<IItem> RemovedItem { get; }
+		IObservable<ItemPlacement> ItemPlaced { get; }
 		void RemoveItem(IItem item);
 		void JustAddNext(ItemPlaceData placeData);
 	}
