@@ -10,12 +10,14 @@ namespace Features.DragAndDropSystems.ItemPlacers
 	{
 		[Inject] ISceneData _sceneData;
 
+		Collider2D[] _resultCache = new Collider2D[8];
+
 		Camera Camera => _sceneData.Camera;
 
 		public void Process(Vector2 screenPos, IItem item)
 		{
 			var pos = Camera.ScreenToWorldPoint(screenPos);
-			
+
 			if (CanPlace<IRemoveItemArea>(pos, out var removeArea))
 			{
 				removeArea.Remove(item);
@@ -23,22 +25,26 @@ namespace Features.DragAndDropSystems.ItemPlacers
 			}
 		}
 
-		bool CanPlace<T>(Vector2 origin, out T place)
+		bool CanPlace<T>(Vector2 point, out T place)
 		{
-			var collider = Physics2D.OverlapPoint(origin);
+			var hitCount = Physics2D.OverlapPointNonAlloc(point, _resultCache);
 
-			if (collider == null)
+			if (hitCount == 0)
 			{
 				place = default;
 				return false;
 			}
 
-			if (false == collider.TryGetComponent<T>(out place))
+			for (int i = 0; i < hitCount; i++)
 			{
-				place = default;
-				return false;
+				var collider = _resultCache[i];
+				if (collider.TryGetComponent<T>(out place))
+				{
+					return true;
+				}
 			}
 
+			place = default;
 			return true;
 		}
 	}

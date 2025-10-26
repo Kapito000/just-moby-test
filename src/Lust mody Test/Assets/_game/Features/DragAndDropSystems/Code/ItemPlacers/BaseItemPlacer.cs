@@ -12,9 +12,10 @@ namespace Features.DragAndDropSystems.ItemPlacers
 	{
 		[Inject] ISceneData _sceneData;
 
-		Camera Camera => _sceneData.Camera;
-
+		Collider2D[] _resultCache = new Collider2D[8];
 		IEnumerable<IItemPlaceCondition> _conditions;
+
+		Camera Camera => _sceneData.Camera;
 
 		public void AddConditions(IEnumerable<IItemPlaceCondition> conditions)
 		{
@@ -41,23 +42,27 @@ namespace Features.DragAndDropSystems.ItemPlacers
 			placer.Place(placeData);
 		}
 
-		bool CanPlace<T>(Vector2 origin, out T place) where T : IItemPlacer
+		bool CanPlace<T>(Vector2 point, out T place) where T : IItemPlacer
 		{
-			var collider = Physics2D.OverlapPoint(origin);
+			var hitCount = Physics2D.OverlapPointNonAlloc(point, _resultCache);
 
-			if (collider == null)
+			if (hitCount == 0)
 			{
 				place = default;
 				return false;
 			}
 
-			if (false == collider.TryGetComponent<T>(out place))
+			for (int i = 0; i < hitCount; i++)
 			{
-				place = default;
-				return false;
+				var collider = _resultCache[i];
+				if (collider.TryGetComponent<T>(out place))
+				{
+					return true;
+				}
 			}
 
-			return true;
+			place = default;
+			return false;
 		}
 	}
 }
