@@ -11,7 +11,7 @@ namespace UI.ItemsMenus
 	{
 		[SerializeField] Transform _itemsParent;
 		[ReadOnly]
-		[SerializeField] List<CubeListItemView> _items;
+		[SerializeField] List<ItemView> _items;
 
 		[Inject] IItemsListViewFactory _factory;
 

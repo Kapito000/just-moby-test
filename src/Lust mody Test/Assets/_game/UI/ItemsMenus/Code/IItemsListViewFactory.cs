@@ -5,6 +5,6 @@ namespace UI.ItemsMenus
 {
 	public interface IItemsListViewFactory : IFactory
 	{
-		CubeListItemView CreateItem(Transform parent);
+		ItemView CreateItem(Transform parent);
 	}
 }

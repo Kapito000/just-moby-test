@@ -10,12 +10,12 @@ namespace UI.ItemsMenus
 		[Inject] IInstantiator _instantiator;
 		[Inject] IAssetProvider _assetProvider;
 
-		public CubeListItemView CreateItem(Transform parent)
+		public ItemView CreateItem(Transform parent)
 		{
 			var itemPrefab = _assetProvider.Load(AssetKeys.CubeListItemView);
 			var itemObj = _instantiator.InstantiatePrefab(itemPrefab, parent);
 
-			if (false == itemObj.TryGetComponent<CubeListItemView>(out var itemView))
+			if (false == itemObj.TryGetComponent<ItemView>(out var itemView))
 				Debug.LogError("Failed to create item view");
 
 			return itemView;

@@ -1,12 +1,11 @@
-﻿using Features.DragAndDropSystems;
-using Features.DragAndDropSystems.ItemStartDrags;
+﻿using Features.DragAndDropSystems.ItemStartDrags;
 using Features.Items;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace UI.ItemsMenus
 {
-	public sealed class CubeListItemView : MonoBehaviour, INewItem
+	public sealed class ItemView : MonoBehaviour, INewItem
 	{
 		[SerializeField] Image _image;
 
